@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+}
+
+@layer utilities {
+  .pixel-border {
+    box-shadow: 
+      0 -2px 0 0 currentColor,
+      2px 0 0 0 currentColor,
+      0 2px 0 0 currentColor,
+      -2px 0 0 0 currentColor;
+  }
+  
+  .pixel-text {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  }
+}
