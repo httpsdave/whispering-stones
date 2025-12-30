@@ -9,6 +9,8 @@ import DeceasedModal from '@/components/DeceasedModal';
 import DeceasedForm from '@/components/DeceasedForm';
 import type { Deceased } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function GraveyardPage() {
   const router = useRouter();
   const { user, profile, loading: authLoading, initialize, signOut } = useAuthStore();

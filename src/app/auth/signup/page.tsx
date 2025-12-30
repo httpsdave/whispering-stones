@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/authStore';
 
+export const dynamic = 'force-dynamic';
+
 export default function SignUpPage() {
   const router = useRouter();
   const signUp = useAuthStore((state) => state.signUp);
