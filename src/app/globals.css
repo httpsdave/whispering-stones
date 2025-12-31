@@ -24,6 +24,26 @@
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
     line-height: 1.6;
   }
+
+  .pixel-label {
+    font-family: var(--font-press-start), 'Courier New', monospace;
+    text-shadow: none;
+    letter-spacing: 0.08em;
+  }
+
+  .pixel-input {
+    font-family: var(--font-press-start), 'Courier New', monospace;
+    text-shadow: none;
+  }
+
+  input.pixel-input:-webkit-autofill,
+  input.pixel-input:-webkit-autofill:hover,
+  input.pixel-input:-webkit-autofill:focus {
+    font-family: var(--font-press-start), 'Courier New', monospace;
+    -webkit-text-fill-color: #f3f4f6;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: 0 0 0px 1000px #1f2937 inset;
+  }
   
   .retro-button {
     font-family: var(--font-press-start), 'Courier New', monospace;
