@@ -43,9 +43,21 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12">
           <Link 
             href="/auth/signup"
-            className="retro-button px-8 py-4 bg-teal-800 hover:bg-teal-700 text-white pixel-text text-sm transition-all"
+            className="relative px-6 py-3 overflow-hidden transition-all hover:scale-105 active:scale-95"
+            style={{
+              clipPath: 'polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px)'
+            }}
           >
-            Create Graveyard
+            <Image
+              src="/mossystone.jpg"
+              alt="Mossy stone"
+              fill
+              className="object-cover"
+              style={{ imageRendering: 'pixelated' }}
+            />
+            <span className="relative z-10 text-white pixel-text text-base drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
+              Create Graveyard
+            </span>
           </Link>
           <Link 
             href="/auth/login"

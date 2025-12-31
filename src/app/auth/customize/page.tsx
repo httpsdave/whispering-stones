@@ -55,8 +55,9 @@ export default function CustomizePage() {
 
     setIsSubmitting(true);
     try {
+      const selectedThemeName = themes.find(t => t.id === selectedTheme)?.name || 'Stillwater Grounds';
       await updateProfile({
-        graveyard_name: graveyardName || 'Stillwater Grounds',
+        graveyard_name: graveyardName || selectedThemeName,
         graveyard_theme: selectedTheme
       });
       router.push('/graveyard');

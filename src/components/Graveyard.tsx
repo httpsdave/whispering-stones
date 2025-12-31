@@ -20,8 +20,17 @@ const themeImages: Record<string, string> = {
   'thunders-reach': '/graveyarddesign5.gif'
 };
 
+const themeNames: Record<string, string> = {
+  stillwater: 'Stillwater Grounds',
+  unremembered: 'Unremembered Grove',
+  'final-meadow': 'Final Meadow',
+  'sunset-ridge': 'Sunset Ridge',
+  'thunders-reach': "Thunder's Reach"
+};
+
 export default function Graveyard({ deceased, onTombstoneClick, graveyardName, graveyardTheme = 'stillwater' }: GraveyardProps) {
   const backgroundImage = themeImages[graveyardTheme] || themeImages.stillwater;
+  const displayName = graveyardName || themeNames[graveyardTheme] || 'My Graveyard';
 
   return (
     <div className="h-full relative overflow-hidden">
@@ -40,7 +49,7 @@ export default function Graveyard({ deceased, onTombstoneClick, graveyardName, g
       {/* Header */}
       <div className="relative z-10 text-center py-8 px-4">
         <h1 className="text-3xl md:text-5xl pixel-text text-gray-200 mb-2">
-          {graveyardName || 'My Graveyard'}
+          {displayName}
         </h1>
         <p className="text-sm md:text-base pixel-text text-gray-400">
           🕊️ {deceased.length} {deceased.length === 1 ? 'soul' : 'souls'} at rest 🕊️
