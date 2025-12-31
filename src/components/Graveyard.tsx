@@ -47,7 +47,7 @@ export default function Graveyard({ deceased, onTombstoneClick, graveyardName, g
         />
       </div>
       {/* Header */}
-      <div className="relative z-10 text-center py-8 px-4">
+      <div className="relative z-10 text-center py-4 mt-12 px-4">
         <h1 className="text-3xl md:text-5xl pixel-text text-gray-200 mb-2">
           {displayName}
         </h1>

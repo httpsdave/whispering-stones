@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuthStore } from '@/store/authStore';
 import { useDeceasedStore } from '@/store/deceasedStore';
 import Graveyard from '@/components/Graveyard';
@@ -20,7 +21,7 @@ export default function GraveyardPage() {
   const [showModal, setShowModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingDeceased, setEditingDeceased] = useState<Deceased | null>(null);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     initialize();
@@ -122,57 +123,113 @@ export default function GraveyardPage() {
 
   return (
     <>
-      {/* Header Nav */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-graveyard-dark bg-opacity-90 border-b-2 border-gray-700">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <h2 className="text-lg md:text-xl pixel-text text-gray-200">
-            👤 {profile?.email}
-          </h2>
-          <div className="flex gap-2 items-center">
+      {/* Hamburger Menu Button */}
+      <button
+        onClick={() => setShowSidebar(!showSidebar)}
+        className="fixed top-4 left-4 z-50 p-2 transition-all hover:scale-110"
+      >
+        <div className="space-y-1">
+          <div className="w-6 h-1 bg-white"></div>
+          <div className="w-6 h-1 bg-gray-300"></div>
+          <div className="w-6 h-1 bg-gray-400"></div>
+        </div>
+      </button>
+
+      {/* Sidebar Overlay */}
+      {showSidebar && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-60 z-40 transition-opacity duration-300"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full w-80 z-50 transition-transform duration-500 ease-out ${
+          showSidebar ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        style={{
+          clipPath: 'polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px)'
+        }}
+      >
+        <div className="relative h-full">
+          {/* Sidebar Background */}
+          <div className="absolute inset-0">
+            <Image
+              src="/blackstone.webp"
+              alt="Stone texture"
+              fill
+              className="object-cover"
+              style={{ imageRendering: 'pixelated' }}
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          </div>
+
+          {/* Sidebar Content */}
+          <div className="relative h-full flex flex-col p-6 space-y-6">
+            {/* Close Button */}
             <button
-              onClick={() => setShowForm(true)}
-              className="pixel-border px-4 py-2 bg-purple-900 hover:bg-purple-800 text-white pixel-text text-sm transition-all"
+              onClick={() => setShowSidebar(false)}
+              className="self-end text-white text-2xl hover:text-gray-300 transition-all"
             >
-              + Add Memorial
+              ×
             </button>
-            
-            {/* Profile Dropdown */}
-            <div className="relative">
+
+            {/* User Info */}
+            <div className="border-b-2 border-gray-600 pb-4">
+              <div className="text-2xl mb-2">👤</div>
+              <p className="pixel-text text-gray-200 text-xs break-all">
+                {profile?.email}
+              </p>
+              <p className="pixel-text text-gray-400 text-xs mt-2">
+                {profile?.graveyard_name}
+              </p>
+            </div>
+
+            {/* Menu Items */}
+            <div className="flex-1 space-y-4">
               <button
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="pixel-border px-4 py-2 bg-graveyard-night hover:bg-gray-800 text-white pixel-text text-sm transition-all"
+                onClick={() => {
+                  setShowSidebar(false);
+                  setShowForm(true);
+                }}
+                className="w-full text-left px-4 py-3 text-green-700 hover:text-green-600 pixel-text text-base transition-all hover:scale-105"
               >
-                Profile ▾
+                + Add Memorial
               </button>
-              
-              {showProfileMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-graveyard-night border-2 border-gray-700 rounded shadow-lg z-50">
-                  <button
-                    onClick={() => {
-                      setShowProfileMenu(false);
-                      handleSignOut();
-                    }}
-                    className="w-full text-left px-4 py-3 hover:bg-gray-800 text-white pixel-text text-xs transition-all border-b border-gray-700"
-                  >
-                    Sign Out
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowProfileMenu(false);
-                      handleDeleteAccount();
-                    }}
-                    className="w-full text-left px-4 py-3 hover:bg-red-900 text-red-400 pixel-text text-xs transition-all"
-                  >
-                    Delete Account
-                  </button>
-                </div>
-              )}
+
+              <button
+                onClick={() => {
+                  setShowSidebar(false);
+                  handleSignOut();
+                }}
+                className="w-full text-left px-4 py-3 text-white hover:text-gray-300 pixel-text text-base transition-all hover:scale-105"
+              >
+                Sign Out
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowSidebar(false);
+                  handleDeleteAccount();
+                }}
+                className="w-full text-left px-4 py-3 pixel-text text-base transition-all hover:scale-105"
+                style={{
+                  background: 'linear-gradient(to bottom, #dc2626 0%, #dc2626 25%, #991b1b 25%, #991b1b 50%, #7f1d1d 50%, #7f1d1d 75%, #991b1b 75%, #991b1b 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundSize: '100% 8px'
+                }}
+              >
+                Delete Account
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="h-screen overflow-hidden pt-16">
+      <div className="h-screen overflow-hidden">
         <Graveyard
           deceased={deceased}
           onTombstoneClick={handleTombstoneClick}
