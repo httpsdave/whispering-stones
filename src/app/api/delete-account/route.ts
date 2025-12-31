@@ -24,35 +24,7 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    // Delete all deceased entries
-    const { error: deceasedError } = await supabaseAdmin
-      .from('deceased')
-      .delete()
-      .eq('user_id', userId);
-
-    if (deceasedError) {
-      console.error('Error deleting deceased entries:', deceasedError);
-      return NextResponse.json(
-        { error: 'Failed to delete deceased entries' },
-        { status: 500 }
-      );
-    }
-
-    // Delete profile
-    const { error: profileError } = await supabaseAdmin
-      .from('profiles')
-      .delete()
-      .eq('id', userId);
-
-    if (profileError) {
-      console.error('Error deleting profile:', profileError);
-      return NextResponse.json(
-        { error: 'Failed to delete profile' },
-        { status: 500 }
-      );
-    }
-
-    // Delete auth user (permanent deletion)
+    // Delete auth user - cascade will handle profiles and deceased
     const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(
       userId
     );
