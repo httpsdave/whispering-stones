@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (data.user && graveyardName) {
       await supabase
         .from('profiles')
-        .update({ graveyard_name: graveyardName })
+        .update({ graveyard_name: graveyardName } as any)
         .eq('id', data.user.id);
     }
 
