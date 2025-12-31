@@ -24,7 +24,14 @@ export default function LoginPage() {
 
     try {
       await signIn(email, password);
-      router.push('/graveyard');
+      
+      // Check if user needs to customize their graveyard
+      const { profile } = useAuthStore.getState();
+      if (!profile?.graveyard_name || !profile?.graveyard_theme) {
+        router.push('/auth/customize');
+      } else {
+        router.push('/graveyard');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
     } finally {

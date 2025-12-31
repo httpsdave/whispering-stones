@@ -17,6 +17,7 @@ export type Profile = {
   id: string;
   email: string;
   graveyard_name: string | null;
+  graveyard_theme?: string | null;
   created_at: string;
 };
 

@@ -172,11 +172,12 @@ export default function GraveyardPage() {
         </div>
       </div>
 
-      <div className="pt-16">
+      <div className="h-screen overflow-hidden pt-16">
         <Graveyard
           deceased={deceased}
           onTombstoneClick={handleTombstoneClick}
           graveyardName={profile?.graveyard_name || undefined}
+          graveyardTheme={profile?.graveyard_theme || 'stillwater'}
         />
       </div>
 

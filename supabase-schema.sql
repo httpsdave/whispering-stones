@@ -3,6 +3,7 @@ create table profiles (
   id uuid references auth.users on delete cascade primary key,
   email text unique not null,
   graveyard_name text,
+  graveyard_theme text default 'stillwater',
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 

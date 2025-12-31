@@ -26,7 +26,7 @@ export default function SetupPage() {
     }
     setUser(user);
 
-    // Check if graveyard name already set
+    // Check if graveyard name already set, redirect to customize
     const { data: profile } = await supabase
       .from('profiles')
       .select('graveyard_name')
@@ -35,6 +35,9 @@ export default function SetupPage() {
 
     if (profile?.graveyard_name) {
       router.push('/graveyard');
+    } else {
+      // Redirect to customize page for theme selection
+      router.push('/auth/customize');
     }
   };
 
