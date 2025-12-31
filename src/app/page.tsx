@@ -40,7 +40,7 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-6 justify-center mt-12">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12">
           <Link 
             href="/auth/signup"
             className="retro-button px-8 py-4 bg-teal-800 hover:bg-teal-700 text-white pixel-text text-sm transition-all"
@@ -49,7 +49,7 @@ export default function Home() {
           </Link>
           <Link 
             href="/auth/login"
-            className="retro-button px-8 py-4 bg-gray-700 hover:bg-gray-600 text-white pixel-text text-sm transition-all"
+            className="py-4 text-white hover:text-gray-300 pixel-text text-lg transition-all hover:scale-105 active:scale-95"
           >
             Enter
           </Link>
