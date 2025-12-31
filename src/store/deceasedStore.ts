@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabase';
 import type { Deceased } from '@/types';
 
 interface DeceasedState {
@@ -17,6 +17,7 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
 
   fetchDeceased: async (userId: string) => {
     set({ loading: true });
+    const supabase = getSupabaseClient();
     try {
       const { data, error } = await supabase
         .from('deceased')
@@ -33,6 +34,7 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
   },
 
   addDeceased: async (deceased) => {
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase
       .from('deceased')
       .insert([deceased])
@@ -47,6 +49,7 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
   },
 
   updateDeceased: async (id, updates) => {
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from('deceased')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -62,6 +65,7 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
   },
 
   deleteDeceased: async (id) => {
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from('deceased')
       .delete()
