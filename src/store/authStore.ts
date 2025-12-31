@@ -49,9 +49,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (error) throw error;
 
     if (data.user && graveyardName) {
-      await (supabase
+      await supabase
         .from('profiles')
-        .update({ graveyard_name: graveyardName }) as any)
+        .update({ graveyard_name: graveyardName })
         .eq('id', data.user.id);
     }
 
@@ -77,9 +77,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { user } = get();
     if (!user) throw new Error('Not authenticated');
 
-    const { error } = await (supabase
+    const { error } = await supabase
       .from('profiles')
-      .update(updates as any) as any)
+      .update(updates)
       .eq('id', user.id);
 
     if (error) throw error;

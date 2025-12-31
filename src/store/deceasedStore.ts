@@ -35,9 +35,9 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
 
   addDeceased: async (deceased) => {
     const supabase = getSupabaseClient();
-    const { data, error } = await (supabase
+    const { data, error} = await supabase
       .from('deceased')
-      .insert([deceased as any]) as any)
+      .insert([deceased])
       .select()
       .single();
 
@@ -50,9 +50,9 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
 
   updateDeceased: async (id, updates) => {
     const supabase = getSupabaseClient();
-    const { error } = await (supabase
+    const { error } = await supabase
       .from('deceased')
-      .update({ ...updates, updated_at: new Date().toISOString() } as any) as any)
+      .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('id', id);
 
     if (error) throw error;
