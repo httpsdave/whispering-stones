@@ -20,6 +20,7 @@ export default function GraveyardPage() {
   const [showModal, setShowModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingDeceased, setEditingDeceased] = useState<Deceased | null>(null);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   useEffect(() => {
     initialize();
@@ -68,6 +69,47 @@ export default function GraveyardPage() {
     router.push('/');
   };
 
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+
+    const confirmText = 'DELETE';
+    const userInput = prompt(
+      `⚠️ WARNING: This will permanently delete your account and ALL memorials.\n\nType "${confirmText}" to confirm:`
+    );
+
+    if (userInput !== confirmText) {
+      if (userInput !== null) {
+        alert('Account deletion cancelled.');
+      }
+      return;
+    }
+
+    try {
+      // Call server-side API to permanently delete account
+      const response = await fetch('/api/delete-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to delete account');
+      }
+
+      // Sign out and redirect
+      await signOut();
+      router.push('/');
+      alert('Your account has been permanently deleted.');
+    } catch (error: any) {
+      console.error('Delete account error:', error);
+      alert('Failed to delete account: ' + error.message);
+    }
+  };
+
   if (authLoading || deceasedLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-graveyard-dark">
@@ -86,19 +128,46 @@ export default function GraveyardPage() {
           <h2 className="text-lg md:text-xl pixel-text text-gray-200">
             👤 {profile?.email}
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <button
               onClick={() => setShowForm(true)}
               className="pixel-border px-4 py-2 bg-purple-900 hover:bg-purple-800 text-white pixel-text text-sm transition-all"
             >
               + Add Memorial
             </button>
-            <button
-              onClick={handleSignOut}
-              className="pixel-border px-4 py-2 bg-graveyard-night hover:bg-gray-800 text-white pixel-text text-sm transition-all"
-            >
-              Sign Out
-            </button>
+            
+            {/* Profile Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="pixel-border px-4 py-2 bg-graveyard-night hover:bg-gray-800 text-white pixel-text text-sm transition-all"
+              >
+                Profile ▾
+              </button>
+              
+              {showProfileMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-graveyard-night border-2 border-gray-700 rounded shadow-lg z-50">
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      handleSignOut();
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-gray-800 text-white pixel-text text-xs transition-all border-b border-gray-700"
+                  >
+                    Sign Out
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowProfileMenu(false);
+                      handleDeleteAccount();
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-red-900 text-red-400 pixel-text text-xs transition-all"
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
