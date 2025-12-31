@@ -126,9 +126,22 @@ export default function GraveyardPage() {
       {/* Hamburger Menu Button */}
       <button
         onClick={() => setShowSidebar(!showSidebar)}
-        className="fixed top-4 left-4 z-50 p-2 transition-all hover:scale-110"
+        className="fixed top-6 left-4 z-50 p-3 transition-all hover:scale-110 overflow-hidden"
+        style={{
+          clipPath: 'polygon(3px 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 0 calc(100% - 3px), 0 3px)'
+        }}
       >
-        <div className="space-y-1">
+        <div className="absolute inset-0">
+          <Image
+            src="/blackstone.webp"
+            alt="Stone texture"
+            fill
+            className="object-cover"
+            style={{ imageRendering: 'pixelated' }}
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+        </div>
+        <div className="relative space-y-1">
           <div className="w-6 h-1 bg-white"></div>
           <div className="w-6 h-1 bg-gray-300"></div>
           <div className="w-6 h-1 bg-gray-400"></div>

@@ -48,22 +48,22 @@ export default function Graveyard({ deceased, onTombstoneClick, graveyardName, g
       </div>
       {/* Header */}
       <div className="relative z-10 text-center py-4 mt-12 px-4">
-        <h1 className="text-3xl md:text-5xl pixel-text text-gray-200 mb-2">
+        <h1 className="text-3xl md:text-5xl pixel-text text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 4px 4px 8px rgba(0, 0, 0, 0.6)' }}>
           {displayName}
         </h1>
-        <p className="text-sm md:text-base pixel-text text-gray-400">
+        <p className="text-sm md:text-base pixel-text text-white" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.6)' }}>
           🕊️ {deceased.length} {deceased.length === 1 ? 'soul' : 'souls'} at rest 🕊️
         </p>
       </div>
 
       {/* Graveyard Grid */}
-      <div className="relative z-10 container mx-auto px-4 h-full overflow-y-auto pb-8">
+      <div className="relative z-10 container mx-auto px-4 h-full overflow-hidden pb-8">
         {deceased.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-xl md:text-2xl pixel-text text-gray-400">
+            <p className="text-xl md:text-2xl pixel-text text-white" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.6)' }}>
               Your graveyard is empty...
             </p>
-            <p className="text-sm md:text-base pixel-text text-gray-500 mt-4">
+            <p className="text-sm md:text-base pixel-text text-gray-200 mt-4" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.6)' }}>
               Create your first memorial
             </p>
           </div>
