@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getSupabaseClient } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import type { User } from '@supabase/supabase-js';
 import type { Profile } from '@/types';
 
@@ -21,7 +21,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
-      const supabase = getSupabaseClient();
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
@@ -42,7 +41,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signUp: async (email: string, password: string, graveyardName?: string) => {
-    const supabase = getSupabaseClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -51,9 +49,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (error) throw error;
 
     if (data.user && graveyardName) {
-      await supabase
+      await (supabase
         .from('profiles')
-        .update({ graveyard_name: graveyardName } as any)
+        .update({ graveyard_name: graveyardName }) as any)
         .eq('id', data.user.id);
     }
 
@@ -61,7 +59,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signIn: async (email: string, password: string) => {
-    const supabase = getSupabaseClient();
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -72,7 +69,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signOut: async () => {
-    const supabase = getSupabaseClient();
     await supabase.auth.signOut();
     set({ user: null, profile: null });
   },
@@ -81,10 +77,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { user } = get();
     if (!user) throw new Error('Not authenticated');
 
-    const supabase = getSupabaseClient();
-    const { error } = await supabase
+    const { error } = await (supabase
       .from('profiles')
-      .update(updates)
+      .update(updates as any) as any)
       .eq('id', user.id);
 
     if (error) throw error;
