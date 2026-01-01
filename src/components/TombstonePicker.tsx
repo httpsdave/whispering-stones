@@ -11,44 +11,90 @@ export default function TombstonePicker({ selected, onSelect }: TombstonePickerP
   
   const getStylePreview = (style: TombstoneStyle) => {
     const baseClasses = "w-full h-full flex items-center justify-center relative";
+    const pixelStyle = { imageRendering: 'pixelated' as const };
     
     switch (style) {
       case 1:
-        return <div className={`${baseClasses} bg-gray-600 rounded-t-full border-2 border-gray-800`} />;
+        return (
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute top-0 left-[20%] w-[10%] h-[8%] bg-slate-600 border border-slate-900" />
+            <div className="absolute top-[8%] left-[15%] w-[20%] h-[6%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[8%] right-[15%] w-[20%] h-[6%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-0 right-[20%] w-[10%] h-[8%] bg-slate-600 border border-slate-900" />
+            <div className="absolute top-[14%] left-[10%] right-[10%] h-[6%] bg-slate-400 border border-slate-900" />
+            <div className="absolute top-[20%] left-0 right-0 h-[60%] bg-slate-500 border border-slate-900" />
+            <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-slate-700 border border-slate-900" />
+          </div>
+        );
       case 2:
         return (
-          <div className={`${baseClasses} bg-gray-500`}>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-full bg-gray-600 border border-gray-800" />
-            <div className="absolute top-1/4 left-0 w-full h-1 bg-gray-600 border border-gray-800" />
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute bottom-0 left-[20%] right-[20%] h-[20%] bg-slate-700 border border-slate-900" />
+            <div className="absolute top-[5%] bottom-[18%] left-[40%] right-[40%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[25%] left-[15%] right-[15%] h-[15%] bg-slate-500 border border-slate-900" />
           </div>
         );
       case 3:
         return (
-          <div className={`${baseClasses} bg-gray-700 border-2 border-gray-900 rounded`}>
-            <span className="text-[8px] font-bold pixel-text text-gray-300">RIP</span>
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute top-0 left-[30%] right-[30%] h-[4%] bg-slate-600 border border-slate-900" />
+            <div className="absolute top-[4%] left-[20%] w-[15%] h-[6%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[4%] right-[20%] w-[15%] h-[6%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[10%] left-[10%] right-[10%] h-[8%] bg-slate-400 border border-slate-900" />
+            <div className="absolute top-[18%] left-0 right-0 h-[62%] bg-slate-500 border border-slate-900" />
+            <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-slate-700 border border-slate-900" />
+            <span className="text-[8px] font-bold pixel-text text-slate-900 z-10">RIP</span>
           </div>
         );
       case 4:
         return (
-          <div className={`${baseClasses} bg-gradient-to-b from-gray-500 to-gray-700 border-2 border-gray-900`}>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-600 rotate-45 -translate-y-1.5 border border-gray-800" />
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-1 bg-slate-300 border border-slate-900 z-10" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-1 bg-slate-400 border border-slate-900 z-10" />
+            <div className="absolute top-0 left-[5%] right-[5%] h-[25%] bg-slate-400 border border-slate-900" />
+            <div className="absolute top-[23%] left-0 right-0 h-[52%] bg-slate-500 border border-slate-900" />
+            <div className="absolute bottom-0 left-0 right-0 h-[25%] bg-slate-700 border border-slate-900" />
           </div>
         );
       case 5:
         return (
-          <div className={`${baseClasses} bg-gray-600 border-2 border-gray-900`}
-               style={{ clipPath: 'polygon(50% 0%, 100% 20%, 100% 100%, 0 100%, 0 20%)' }} />
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute top-0 left-[45%] w-[10%] h-[6%] bg-slate-600 border border-slate-900" />
+            <div className="absolute top-[6%] left-[35%] right-[35%] h-[6%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[12%] left-[25%] right-[25%] h-[6%] bg-slate-400 border border-slate-900" />
+            <div className="absolute top-[18%] left-[10%] right-[10%] h-[6%] bg-slate-400 border border-slate-900" />
+            <div className="absolute top-[24%] left-0 w-full h-[56%] bg-slate-500 border border-slate-900" />
+            <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-slate-700 border border-slate-900" />
+          </div>
         );
       case 6:
-        return <div className={`${baseClasses} bg-gray-700 border-2 border-gray-900 rounded`} />;
+        return (
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute inset-0 bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[5%] left-[5%] right-[5%] h-[70%] bg-slate-600" />
+            <div className="absolute right-[5%] top-[5%] h-[70%] w-[8%] bg-slate-700" />
+            <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-slate-700 border border-slate-900" />
+          </div>
+        );
       case 7:
-        return <div className={`${baseClasses} bg-gray-500 border-2 border-gray-800 rounded-t-2xl opacity-80`} />;
+        return (
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute top-0 left-[25%] w-[10%] h-[6%] bg-slate-500 border border-slate-800 opacity-90" />
+            <div className="absolute top-0 right-[25%] w-[10%] h-[6%] bg-slate-500 border border-slate-800 opacity-90" />
+            <div className="absolute top-[6%] left-[15%] right-[15%] h-[8%] bg-slate-400 border border-slate-800 opacity-90" />
+            <div className="absolute top-[14%] left-[10%] right-[10%] h-[8%] bg-slate-400 border border-slate-800 opacity-90" />
+            <div className="absolute top-[22%] left-0 right-0 h-[58%] bg-slate-500 border border-slate-800 opacity-90" />
+            <div className="absolute bottom-0 left-0 right-0 h-[20%] bg-slate-600 border border-slate-900" />
+          </div>
+        );
       case 8:
         return (
-          <div className={`${baseClasses} bg-gray-600`}>
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-700 rounded-full border border-gray-900" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-full bg-gray-600 border border-gray-800" />
-            <div className="absolute top-1/4 left-0 w-full h-1 bg-gray-600 border border-gray-800" />
+          <div className={baseClasses} style={pixelStyle}>
+            <div className="absolute bottom-0 left-[20%] right-[20%] h-[18%] bg-slate-700 border border-slate-900" />
+            <div className="absolute top-[5%] bottom-[16%] left-[40%] right-[40%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[22%] left-[15%] right-[15%] h-[15%] bg-slate-500 border border-slate-900" />
+            <div className="absolute top-[16%] left-[35%] w-[30%] h-[22%] bg-slate-500 border border-slate-900 z-10" />
+            <div className="absolute top-[23%] left-[43%] w-[14%] h-[8%] bg-slate-400 border border-slate-900 z-10" />
           </div>
         );
     }
