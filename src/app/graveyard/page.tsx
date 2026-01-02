@@ -8,6 +8,7 @@ import { useDeceasedStore } from '@/store/deceasedStore';
 import Graveyard from '@/components/Graveyard';
 import DeceasedModal from '@/components/DeceasedModal';
 import DeceasedForm from '@/components/DeceasedForm';
+import ConfirmationModal from '@/components/ConfirmationModal';
 import type { Deceased } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -22,6 +23,7 @@ export default function GraveyardPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingDeceased, setEditingDeceased] = useState<Deceased | null>(null);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     initialize();
@@ -73,18 +75,6 @@ export default function GraveyardPage() {
   const handleDeleteAccount = async () => {
     if (!user) return;
 
-    const confirmText = 'DELETE';
-    const userInput = prompt(
-      `⚠️ WARNING: This will permanently delete your account and ALL memorials.\n\nType "${confirmText}" to confirm:`
-    );
-
-    if (userInput !== confirmText) {
-      if (userInput !== null) {
-        alert('Account deletion cancelled.');
-      }
-      return;
-    }
-
     try {
       // Call server-side API to permanently delete account
       const response = await fetch('/api/delete-account', {
@@ -104,7 +94,6 @@ export default function GraveyardPage() {
       // Sign out and redirect
       await signOut();
       router.push('/');
-      alert('Your account has been permanently deleted.');
     } catch (error: any) {
       console.error('Delete account error:', error);
       alert('Failed to delete account: ' + error.message);
@@ -136,6 +125,7 @@ export default function GraveyardPage() {
             src="/blackstone.webp"
             alt="Stone texture"
             fill
+            sizes="48px"
             className="object-cover"
             style={{ imageRendering: 'pixelated' }}
           />
@@ -172,6 +162,7 @@ export default function GraveyardPage() {
               src="/blackstone.webp"
               alt="Stone texture"
               fill
+              sizes="320px"
               className="object-cover"
               style={{ imageRendering: 'pixelated' }}
             />
@@ -204,16 +195,6 @@ export default function GraveyardPage() {
               <button
                 onClick={() => {
                   setShowSidebar(false);
-                  setShowForm(true);
-                }}
-                className="w-full text-left px-4 py-3 text-green-700 hover:text-green-600 pixel-text text-base transition-all hover:scale-105"
-              >
-                + Add Memorial
-              </button>
-
-              <button
-                onClick={() => {
-                  setShowSidebar(false);
                   handleSignOut();
                 }}
                 className="w-full text-left px-4 py-3 text-white hover:text-gray-300 pixel-text text-base transition-all hover:scale-105"
@@ -224,7 +205,7 @@ export default function GraveyardPage() {
               <button
                 onClick={() => {
                   setShowSidebar(false);
-                  handleDeleteAccount();
+                  setShowDeleteConfirm(true);
                 }}
                 className="w-full text-left px-4 py-3 pixel-text text-base transition-all hover:scale-105"
                 style={{
@@ -265,6 +246,74 @@ export default function GraveyardPage() {
         deceased={editingDeceased}
         userId={user.id}
       />
+
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeleteAccount}
+        title="Delete Account"
+        confirmText="DELETE"
+        requiresTyping={true}
+        confirmButtonText="Delete Forever"
+        cancelButtonText="Cancel"
+        isDangerous={true}
+      >
+        <div className="text-sm md:text-base pixel-text leading-relaxed space-y-3">
+          <p className="text-gray-300">
+            <span className="text-yellow-400 font-bold">WARNING:</span> This will permanently delete your account and <span className="text-yellow-400 font-bold">ALL</span> memorials.
+          </p>
+          <p className="text-red-500 font-bold">
+            This action cannot be undone!
+          </p>
+        </div>
+      </ConfirmationModal>
+
+      {/* Floating Add Button */}
+      <div className="fixed bottom-10 right-10 z-40 group">
+        <button
+          onClick={() => setShowForm(true)}
+          className="w-14 h-14 md:w-16 md:h-16 transition-all hover:scale-110 overflow-hidden shadow-lg relative"
+        >
+          <div className="absolute inset-0">
+            <Image
+              src="/blackstone.webp"
+              alt="Stone texture"
+              fill
+              sizes="64px"
+              className="object-cover"
+              style={{ imageRendering: 'pixelated' }}
+            />
+          </div>
+          <div className="relative flex items-center justify-center h-full">
+            <span className="text-4xl md:text-5xl text-white font-bold leading-none" style={{ textShadow: '2px 2px 0 rgba(0,0,0,0.5)' }}>+</span>
+          </div>
+        </button>
+        
+        {/* Pixelated Tooltip */}
+        <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+          <div 
+            className="relative overflow-hidden"
+            style={{
+              clipPath: 'polygon(2px 0, calc(100% - 2px) 0, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 0 calc(100% - 2px), 0 2px)'
+            }}
+          >
+            <div className="absolute inset-0">
+              <Image
+                src="/blackstone.webp"
+                alt="Tooltip background"
+                fill
+                sizes="150px"
+                className="object-cover"
+                style={{ imageRendering: 'pixelated' }}
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-70"></div>
+            </div>
+            <div className="relative px-3 py-2">
+              <p className="text-xs pixel-text text-gray-200 whitespace-nowrap">Add Memorial</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

@@ -18,7 +18,5 @@ export function getSupabaseClient() {
 	return client;
 }
 
-export const supabase = createClient<Database>(
-	process.env.NEXT_PUBLIC_SUPABASE_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Export the same singleton instance
+export const supabase = getSupabaseClient();
