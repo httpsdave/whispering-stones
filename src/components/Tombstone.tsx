@@ -299,26 +299,36 @@ export default function Tombstone({
     const birthYear = getYear(birthDate);
     const deathYear = getYear(deathDate);
     
-    // For cross styles, show text on hover only
+    // For cross styles, show text on hover only as tooltip
     if (isCrossStyle) {
       return (
         <div 
-          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 z-20
+          className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 transition-opacity duration-300 z-30 pointer-events-none
             ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-          style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
         >
-          <div className="text-center px-2">
-            <p className="text-[9px] md:text-[11px] font-bold pixel-text text-gray-100 leading-tight truncate">
-              {name}
-            </p>
-            {(birthDate || deathDate) && (
-              <p className="text-[7px] md:text-[9px] pixel-text text-gray-300 leading-tight">
-                {birthYear} - {deathYear}
+          <div 
+            className="relative overflow-hidden min-w-[200px] max-w-[280px]"
+            style={{
+              clipPath: 'polygon(3px 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 0 calc(100% - 3px), 0 3px)'
+            }}
+          >
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900"></div>
+              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+            </div>
+            <div className="relative px-4 py-3 space-y-1">
+              <p className="text-sm md:text-base font-bold pixel-text text-gray-100 leading-tight">
+                {name}
               </p>
-            )}
-            <p className="text-[6px] md:text-[8px] pixel-text text-gray-400 leading-tight line-clamp-2 mt-0.5">
-              {epitaph}
-            </p>
+              {(birthDate || deathDate) && (
+                <p className="text-xs md:text-sm pixel-text text-gray-300 leading-tight">
+                  {birthYear} - {deathYear}
+                </p>
+              )}
+              <p className="text-xs md:text-sm pixel-text text-gray-400 leading-relaxed pt-1">
+                "{epitaph}"
+              </p>
+            </div>
           </div>
         </div>
       );
@@ -326,19 +336,19 @@ export default function Tombstone({
     
     // For regular tombstones, show text always
     return (
-      <div className="absolute top-[22%] left-0 right-0 bottom-[25%] flex items-center justify-center z-10 px-1">
-        <div className="text-center">
-          <p className="text-[9px] md:text-[11px] font-bold pixel-text text-gray-200 leading-tight truncate max-w-full"
+      <div className="absolute top-[25%] left-[8%] right-[8%] bottom-[28%] flex items-center justify-center z-10 overflow-hidden">
+        <div className="text-center w-full px-1">
+          <p className="text-[7px] md:text-[9px] font-bold pixel-text text-gray-200 leading-tight truncate w-full"
              style={{ textShadow: '1px 1px 0 #000' }}>
             {name}
           </p>
           {(birthDate || deathDate) && (
-            <p className="text-[7px] md:text-[9px] pixel-text text-gray-300 leading-tight"
+            <p className="text-[6px] md:text-[7px] pixel-text text-gray-300 leading-tight truncate"
                style={{ textShadow: '1px 1px 0 #000' }}>
               {birthYear} - {deathYear}
             </p>
           )}
-          <p className="text-[6px] md:text-[8px] pixel-text text-gray-400 leading-tight line-clamp-2 mt-0.5 px-0.5"
+          <p className="text-[5px] md:text-[6px] pixel-text text-gray-400 leading-tight line-clamp-2 mt-0.5"
              style={{ textShadow: '1px 1px 0 #000' }}>
             {epitaph}
           </p>
