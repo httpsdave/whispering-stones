@@ -1,7 +1,77 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const ensureAudioPlaying = () => {
+    if (!audioRef.current) return;
+    audioRef.current.play().catch(() => {
+      console.log('Audio playback still blocked');
+    });
+  };
+
+  useEffect(() => {
+    // Create audio element
+    const audio = new Audio('/bgm1.mp3');
+    audio.loop = true;
+    audio.volume = 0.3; // Set volume to 30%
+    audioRef.current = audio;
+
+    // Try to play audio (may be blocked by browser autoplay policy)
+    const playAudio = async () => {
+      try {
+        await audio.play();
+      } catch (error) {
+        console.log('Autoplay blocked - user interaction required');
+      }
+    };
+
+    playAudio();
+
+    const handleFirstInteraction = async () => {
+      if (!audioRef.current) return;
+      try {
+        await audioRef.current.play();
+        document.removeEventListener('pointerdown', handleFirstInteraction);
+        document.removeEventListener('keydown', handleFirstInteraction);
+      } catch (error) {
+        console.log('Playback blocked after interaction');
+      }
+    };
+
+    document.addEventListener('pointerdown', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+
+    // Cleanup
+    return () => {
+      audio.pause();
+      audio.src = '';
+      document.removeEventListener('pointerdown', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      if (!next) {
+        ensureAudioPlaying();
+      }
+      return next;
+    });
+  };
+
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden">
       {/* Background Image */}
@@ -18,6 +88,47 @@ export default function Home() {
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
+
+      {/* Mute/Unmute Button */}
+      <button
+        onClick={toggleMute}
+        className="fixed top-6 right-6 z-50 p-2 transition-all hover:scale-110 overflow-hidden"
+        style={{
+          clipPath: 'polygon(2px 0, calc(100% - 2px) 0, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 0 calc(100% - 2px), 0 2px)'
+        }}
+        title={isMuted ? 'Unmute' : 'Mute'}
+      >
+        <div className="absolute inset-0">
+          <Image
+            src="/blackstone.webp"
+            alt="Stone texture"
+            fill
+            sizes="48px"
+            className="object-cover"
+            style={{ imageRendering: 'pixelated' }}
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        </div>
+        <div className="relative w-6 h-6 flex items-center justify-center">
+          {isMuted ? (
+            // Muted icon (speaker with X)
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-gray-300">
+              <rect x="4" y="9" width="3" height="6" fill="currentColor" style={{ imageRendering: 'pixelated' }} />
+              <polygon points="7,9 11,6 11,18 7,15" fill="currentColor" style={{ imageRendering: 'pixelated' }} />
+              <line x1="16" y1="9" x2="20" y2="13" stroke="currentColor" strokeWidth="2" style={{ imageRendering: 'pixelated' }} />
+              <line x1="20" y1="9" x2="16" y2="13" stroke="currentColor" strokeWidth="2" style={{ imageRendering: 'pixelated' }} />
+            </svg>
+          ) : (
+            // Unmuted icon (speaker with waves)
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-gray-300">
+              <rect x="4" y="9" width="3" height="6" fill="currentColor" style={{ imageRendering: 'pixelated' }} />
+              <polygon points="7,9 11,6 11,18 7,15" fill="currentColor" style={{ imageRendering: 'pixelated' }} />
+              <path d="M15,9 Q17,12 15,15" stroke="currentColor" strokeWidth="2" fill="none" style={{ imageRendering: 'pixelated' }} />
+              <path d="M17,7 Q20,12 17,17" stroke="currentColor" strokeWidth="2" fill="none" style={{ imageRendering: 'pixelated' }} />
+            </svg>
+          )}
+        </div>
+      </button>
 
       {/* Content */}
       <div className="relative z-10 text-center space-y-12 max-w-2xl">

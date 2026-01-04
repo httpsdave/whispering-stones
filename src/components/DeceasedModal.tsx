@@ -90,9 +90,9 @@ export default function DeceasedModal({ deceased, isOpen, onClose, onEdit, onDel
             {onEdit && (
               <button
                 onClick={onEdit}
-                className="col-span-1 pixel-border px-3 py-2 md:px-4 md:py-3 bg-purple-900 hover:bg-purple-800 text-white pixel-text text-xs md:text-sm transition-all"
+                className="col-span-1 pixel-border px-3 py-2 md:px-4 md:py-3 bg-teal-900 hover:bg-teal-800 text-white pixel-text text-xs md:text-sm transition-all"
               >
-                ✏️ Edit
+                Edit
               </button>
             )}
             {onDelete && (
@@ -100,7 +100,7 @@ export default function DeceasedModal({ deceased, isOpen, onClose, onEdit, onDel
                 onClick={onDelete}
                 className="col-span-1 pixel-border px-3 py-2 md:px-4 md:py-3 bg-red-900 hover:bg-red-800 text-white pixel-text text-xs md:text-sm transition-all"
               >
-                🗑️ Delete
+                Delete
               </button>
             )}
             <button

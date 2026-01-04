@@ -1,0 +1,14 @@
+Please add your background music file here:
+
+Required file: bgm1.mp3
+
+The file should be named exactly "bgm1.mp3" and placed in this public folder.
+
+Supported formats: .mp3, .wav, .ogg
+Recommended: MP3 format for best browser compatibility
+
+The audio will:
+- Play automatically on the title screen (if browser allows)
+- Loop continuously
+- Play at 30% volume
+- Have a mute/unmute toggle button in the top right corner

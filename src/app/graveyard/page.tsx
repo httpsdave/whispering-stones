@@ -27,6 +27,7 @@ export default function GraveyardPage() {
   const [editingDeceased, setEditingDeceased] = useState<Deceased | null>(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showMemorialDeleteConfirm, setShowMemorialDeleteConfirm] = useState(false);
 
   useEffect(() => {
     initialize();
@@ -59,15 +60,20 @@ export default function GraveyardPage() {
     }
   };
 
-  const handleDelete = async () => {
-    if (selectedDeceased && confirm('Are you sure you want to remove this memorial?')) {
-      try {
-        await deleteDeceased(selectedDeceased.id);
-        setShowModal(false);
-        setSelectedDeceased(null);
-      } catch (error) {
-        alert('Failed to delete memorial');
-      }
+  const handleDelete = () => {
+    setShowModal(false);
+    setShowMemorialDeleteConfirm(true);
+  };
+
+  const confirmMemorialDelete = async () => {
+    if (!selectedDeceased) return;
+
+    try {
+      await deleteDeceased(selectedDeceased.id);
+      setShowMemorialDeleteConfirm(false);
+      setSelectedDeceased(null);
+    } catch (error) {
+      alert('Failed to delete memorial');
     }
   };
 
@@ -281,6 +287,31 @@ export default function GraveyardPage() {
         <div className="text-sm md:text-base pixel-text leading-relaxed space-y-3">
           <p className="text-gray-300">
             <span className="text-yellow-400 font-bold">WARNING:</span> This will permanently delete your account and <span className="text-yellow-400 font-bold">ALL</span> memorials.
+          </p>
+          <p className="text-red-500 font-bold">
+            This action cannot be undone!
+          </p>
+        </div>
+      </ConfirmationModal>
+
+      <ConfirmationModal
+        isOpen={showMemorialDeleteConfirm}
+        onClose={() => {
+          setShowMemorialDeleteConfirm(false);
+          setSelectedDeceased(null);
+        }}
+        onConfirm={confirmMemorialDelete}
+        title="Delete Memorial"
+        confirmText="DELETE"
+        requiresTyping={false}
+        confirmButtonText="Delete"
+        cancelButtonText="Cancel"
+        isDangerous={true}
+      >
+        <div className="text-sm md:text-base pixel-text leading-relaxed space-y-3">
+          <p className="text-gray-300">
+            Are you sure you want to permanently delete{' '}
+            <span className="text-yellow-400 font-bold">"{selectedDeceased?.name}"</span>?
           </p>
           <p className="text-red-500 font-bold">
             This action cannot be undone!
