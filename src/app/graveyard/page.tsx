@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuthStore } from '@/store/authStore';
 import { useDeceasedStore } from '@/store/deceasedStore';
+import { useGraveyardStore } from '@/store/graveyardStore';
 import Graveyard from '@/components/Graveyard';
 import DeceasedModal from '@/components/DeceasedModal';
 import DeceasedForm from '@/components/DeceasedForm';
 import ConfirmationModal from '@/components/ConfirmationModal';
+import GraveyardSwitcher from '@/components/GraveyardSwitcher';
 import type { Deceased } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -17,6 +19,7 @@ export default function GraveyardPage() {
   const router = useRouter();
   const { user, profile, loading: authLoading, initialize, signOut } = useAuthStore();
   const { deceased, loading: deceasedLoading, fetchDeceased, deleteDeceased } = useDeceasedStore();
+  const { graveyards, activeGraveyard, loading: graveyardLoading, fetchGraveyards } = useGraveyardStore();
   
   const [selectedDeceased, setSelectedDeceased] = useState<Deceased | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -33,9 +36,15 @@ export default function GraveyardPage() {
     if (!authLoading && !user) {
       router.push('/auth/login');
     } else if (user) {
-      fetchDeceased(user.id);
+      fetchGraveyards(user.id);
     }
-  }, [user, authLoading, router, fetchDeceased]);
+  }, [user, authLoading, router, fetchGraveyards]);
+
+  useEffect(() => {
+    if (user && activeGraveyard) {
+      fetchDeceased(user.id, activeGraveyard.id);
+    }
+  }, [user, activeGraveyard, fetchDeceased]);
 
   const handleTombstoneClick = (deceased: Deceased) => {
     setSelectedDeceased(deceased);
@@ -95,12 +104,13 @@ export default function GraveyardPage() {
       await signOut();
       router.push('/');
     } catch (error: any) {
-      console.error('Delete account error:', error);
-      alert('Failed to delete account: ' + error.message);
+      alert(error.message || 'Failed to delete account');
+    } finally {
+      setShowDeleteConfirm(false);
     }
   };
 
-  if (authLoading || deceasedLoading) {
+  if (authLoading || deceasedLoading || graveyardLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-graveyard-dark">
         <p className="text-xl pixel-text text-gray-400">Loading...</p>
@@ -108,10 +118,19 @@ export default function GraveyardPage() {
     );
   }
 
-  if (!user) return null;
+  if (!user || !activeGraveyard) return null;
 
   return (
     <>
+      {/* Graveyard Switcher */}
+      <GraveyardSwitcher 
+        onGraveyardChange={(graveyard) => {
+          if (user) {
+            fetchDeceased(user.id, graveyard.id);
+          }
+        }}
+      />
+
       {/* Hamburger Menu Button */}
       <button
         onClick={() => setShowSidebar(!showSidebar)}
@@ -227,8 +246,8 @@ export default function GraveyardPage() {
         <Graveyard
           deceased={deceased}
           onTombstoneClick={handleTombstoneClick}
-          graveyardName={profile?.graveyard_name || undefined}
-          graveyardTheme={profile?.graveyard_theme || 'stillwater'}
+          graveyardName={activeGraveyard.name}
+          graveyardTheme={activeGraveyard.theme}
         />
       </div>
 
@@ -245,6 +264,7 @@ export default function GraveyardPage() {
         onClose={handleFormClose}
         deceased={editingDeceased}
         userId={user.id}
+        graveyardId={activeGraveyard.id}
       />
 
       <ConfirmationModal

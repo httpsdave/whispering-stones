@@ -10,9 +10,10 @@ interface DeceasedFormProps {
   onClose: () => void;
   deceased?: Deceased | null;
   userId: string;
+  graveyardId: string;
 }
 
-export default function DeceasedForm({ isOpen, onClose, deceased, userId }: DeceasedFormProps) {
+export default function DeceasedForm({ isOpen, onClose, deceased, userId, graveyardId }: DeceasedFormProps) {
   const { addDeceased, updateDeceased } = useDeceasedStore();
   
   const [name, setName] = useState('');
@@ -65,6 +66,7 @@ export default function DeceasedForm({ isOpen, onClose, deceased, userId }: Dece
       } else {
         await addDeceased({
           user_id: userId,
+          graveyard_id: graveyardId,
           name,
           birth_date: birthDate || null,
           death_date: deathDate || null,

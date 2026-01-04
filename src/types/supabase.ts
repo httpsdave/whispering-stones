@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           death_date: string | null
           epitaph: string
+          graveyard_id: string
           id: string
           name: string
           notes: string | null
@@ -34,6 +35,7 @@ export type Database = {
           created_at?: string
           death_date?: string | null
           epitaph: string
+          graveyard_id: string
           id?: string
           name: string
           notes?: string | null
@@ -48,6 +50,7 @@ export type Database = {
           created_at?: string
           death_date?: string | null
           epitaph?: string
+          graveyard_id?: string
           id?: string
           name?: string
           notes?: string | null
@@ -65,6 +68,51 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "deceased_graveyard_id_fkey"
+            columns: ["graveyard_id"]
+            isOneToOne: false
+            referencedRelation: "graveyards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      graveyards: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          theme: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          theme: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          theme?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "graveyards_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -72,18 +120,21 @@ export type Database = {
           created_at: string
           email: string
           graveyard_name: string | null
+          graveyard_theme: string | null
           id: string
         }
         Insert: {
           created_at?: string
           email: string
           graveyard_name?: string | null
+          graveyard_theme?: string | null
           id: string
         }
         Update: {
           created_at?: string
           email?: string
           graveyard_name?: string | null
+          graveyard_theme?: string | null
           id?: string
         }
         Relationships: []

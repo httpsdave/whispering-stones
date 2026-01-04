@@ -5,7 +5,7 @@ import type { Deceased } from '@/types';
 interface DeceasedState {
   deceased: Deceased[];
   loading: boolean;
-  fetchDeceased: (userId: string) => Promise<void>;
+  fetchDeceased: (userId: string, graveyardId?: string) => Promise<void>;
   addDeceased: (deceased: Omit<Deceased, 'id' | 'created_at' | 'updated_at'>) => Promise<void>;
   updateDeceased: (id: string, updates: Partial<Deceased>) => Promise<void>;
   deleteDeceased: (id: string) => Promise<void>;
@@ -15,15 +15,20 @@ export const useDeceasedStore = create<DeceasedState>((set, get) => ({
   deceased: [],
   loading: false,
 
-  fetchDeceased: async (userId: string) => {
+  fetchDeceased: async (userId: string, graveyardId?: string) => {
     set({ loading: true });
     const supabase = getSupabaseClient();
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('deceased')
         .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .eq('user_id', userId);
+
+      if (graveyardId) {
+        query = query.eq('graveyard_id', graveyardId);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
       set({ deceased: data || [], loading: false });

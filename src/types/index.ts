@@ -1,6 +1,7 @@
 export type Deceased = {
   id: string;
   user_id: string;
+  graveyard_id: string;
   name: string;
   birth_date: string | null;
   death_date: string | null;
